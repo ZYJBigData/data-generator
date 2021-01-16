@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /**
- * @author only
+ * @author zhangyingjie
  */
 public class KpiPoint {
     @JsonProperty(value = "db")

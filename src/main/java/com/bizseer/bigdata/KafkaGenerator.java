@@ -9,9 +9,12 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * @author only
+ * @author zhangyingjie
  */
 public class KafkaGenerator {
     final static int APP_NUMBER = 20;
@@ -24,7 +27,7 @@ public class KafkaGenerator {
     String bootStrapServers = "10.0.90.74:9000,10.0.90.75:9000,10.0.90.76:9000";
 
     @Parameter(names = "--topic")
-    String topic = "zyj-in";
+    String topic = "release-2.x-influxdbsink";
 
     @Parameter(names = "--interval", description = "采样间隔")
     int interval = 10;
