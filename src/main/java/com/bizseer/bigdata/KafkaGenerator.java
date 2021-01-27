@@ -9,9 +9,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author zhangyingjie
@@ -41,9 +38,6 @@ public class KafkaGenerator {
     @Parameter(names = "--cpu-db")
     String cpuDb = "metric";
 
-//    @Parameter(names = "--kpi-db")
-//    String kpiDb = "anomaly";
-
     public static void main(String[] args) {
         KafkaGenerator cli = new KafkaGenerator();
         JCommander.newBuilder().addObject(cli).build().parse(args);
@@ -57,9 +51,7 @@ public class KafkaGenerator {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CpuPoint cpuPoint = new CpuPoint();
-//        KpiPoint kpiPoint = new KpiPoint();
         Map<String, Float> metrics = new HashMap<>(10);
-//        Map<String, Map<String, Float>> kpi = new HashMap<>(10);
         List<Map<String, String>> tags = initTag();
         new Timer().schedule(new TimerTask() {
             @Override
@@ -69,26 +61,16 @@ public class KafkaGenerator {
                 try {
                     for (Map<String, String> tag : tags) {
                         for (int i = 1; i <= cli.cpuNum; i++) {
-//                            metrics.put("cpu_" + i, RANDOM.nextFloat() * 100);
-                            metrics.put("cpu", RANDOM.nextFloat() * 100);
+                            metrics.put("cpu_" + i, RANDOM.nextFloat() * 100);
                             cpuPoint.setDb(cli.cpuDb).setTime(time).setTags(tag).setMetrics(metrics);
                             String metricString = mapper.writeValueAsString(cpuPoint);
                             kafkaProducer.send(new ProducerRecord<>(cli.topic, metricString));
                             metrics.clear();
                         }
-//                        for (int i = 1; i <= cli.kpiNum; i++) {
-//                            Map<String, Float> kpiMetrics = produceKpiData();
-//                            kpi.put("kpi_" + i, kpiMetrics);
-//                            kpiPoint.setDb(cli.kpiDb).setTime(time).setTags(tag).setMetrics(kpi).setPreAgg(false);
-//                            String kpiString = mapper.writeValueAsString(kpiPoint);
-//                            kafkaProducer.send(new ProducerRecord<>(cli.topic, kpiString));
-//                            kpi.clear();
-//                        }
                     }
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                     metrics.clear();
-//                    kpi.clear();
                 }
                 System.out.println(sdf.format(System.currentTimeMillis()) + ": done!");
             }
@@ -113,11 +95,4 @@ public class KafkaGenerator {
         }
         return result;
     }
-//    public static Map<String, Float> produceKpiData() {
-//        Map<String, Float> result = new HashMap<>(10);
-//        for (int i = 1; i <= INSTANCE_NUMBER; i++) {
-//            result.put("value_" + i, RANDOM.nextFloat() * 100);
-//        }
-//        return result;
-//    }
 }
