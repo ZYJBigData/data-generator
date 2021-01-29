@@ -1,4 +1,4 @@
-package com.bizseer.bigdata;
+package com.bizseer.bigdata.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;

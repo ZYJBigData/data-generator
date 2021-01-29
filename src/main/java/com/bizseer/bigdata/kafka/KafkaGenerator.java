@@ -1,4 +1,4 @@
-package com.bizseer.bigdata;
+package com.bizseer.bigdata.kafka;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
