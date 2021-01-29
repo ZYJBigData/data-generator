@@ -34,10 +34,10 @@ public class InfluxDbGenerator {
         InfluxDbGenerator cli = new InfluxDbGenerator();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Map<String, String>> tags = initTag();
-        long time = System.currentTimeMillis() / 1000 / cli.interval * cli.interval * 1000 - 24 * 60 * 60 * 1000;
         InfluxDB influxDb = InfluxDBFactory.connect(cli.server);
         ScheduledExecutorService es = Executors.newScheduledThreadPool(cli.executor);
         es.scheduleAtFixedRate(() -> {
+            long time = System.currentTimeMillis() / 1000 / cli.interval * cli.interval * 1000 - 24 * 60 * 60 * 1000;
             System.out.println(sdf.format(System.currentTimeMillis()) + ": start!");
             for (Map<String, String> tag : tags) {
                 for (int i = 0; i < cli.cpuNum; i++) {
