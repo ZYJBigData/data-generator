@@ -1,50 +1,46 @@
 package com.bizseer.bigdata.influxdb;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.bizseer.bigdata.InfluxDbTask;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-/**
- * @author zhangyingjie
- */
 public class InfluxDbGenerator {
-    final static int APPLICATION_NUMBER = 20;
-    final static int SERVICE_NUMBER = 10;
-    final static int PROCESS_NUMBER = 50;
-    final static int HOST_NUMBER = 10;
 
-    @Parameter(names = "--interval", description = "采样间隔")
-    int interval = 10;
-    @Parameter(names = "--cpu", description = "cpu数量,也就是measurement的个数")
-    int cpuNum = 20;
-    @Parameter(names = "--cpu-db", description = "influxdb数据库名字")
-    String cpuDb = "metric";
-    @Parameter(names = "--server", description = "influxdb服务地址")
-    String server = "http://10.0.90.74:8086";
-    @Parameter(names = "--executor", description = "任务执行的线程数")
-    Integer executor = 3;
-    @Parameter(names = "--count", description = "往influxdb没批次写入数据量")
-    Integer count = 10000;
+    final static int INSTANCE_NUMBER = 20;
+    final static int MODEL_NUMBER = 5;
+
+    @Parameter(names = "--url", description = "influxdb 地址")
+    String url = "http://10.0.90.74:8086";
+
+    @Parameter(names = "--thread", description = "thread 数量")
+    int threadNumber = 5;
+
+    @Parameter(names = "--batch", description = "batch size")
+    int batchSize = 2000;
+
+    @Parameter(names = "--interval", description = "时间间隔,单位秒")
+    int interval = 60;
 
     public static void main(String[] args) {
         InfluxDbGenerator cli = new InfluxDbGenerator();
+        JCommander.newBuilder().addObject(cli).build().parse(args);
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(cli.executor, 1000, 1000,
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(cli.threadNumber, cli.threadNumber, 1000,
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100000));
         //数据初始化
-        print("Data init...");
-        List<Metric> metrics = initData(cli);
-
-        //数据分片
-        List<List<Metric>> segments = averageAssign(metrics, cli.executor);
+        print("Data init，生成需要的所有数据。");
+        List<Metric> metrics = initData();
         print("metrics.size:" + metrics.size());
-
+        //根据线程数将数据分片，即就是将数据平均的分给五个线程
+        List<List<Metric>> segments = averageAssign(metrics, cli.threadNumber);
         print("Start sending...");
+        //获取没批的数据放入线程池中执行
         for (List<Metric> segment : segments) {
-            executor.execute(new InfluxDbTask(cli.server, cli.cpuDb, segment, cli.interval, cli.count));
+            executor.execute(new InfluxDbTask(cli.url, segment, cli.interval, cli.batchSize));
         }
-
         try {
             executor.awaitTermination(cli.interval * 2, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -53,8 +49,26 @@ public class InfluxDbGenerator {
         }
     }
 
+    private static List<Metric> initData() {
+        List<Metric> result = new ArrayList<>();
+        for (int instance = 1; instance <= INSTANCE_NUMBER; instance++) {
+            for (int model = 1; model <= MODEL_NUMBER; model++) {
+                Map<String, String> tags = new HashMap<>();
+                tags.put("instance", "instance_" + instance);
+                tags.put("model", "model_" + model);
+                for (int i = 0; i < 10; i++) {
+                    Metric metric = new Metric();
+                    metric.tags = tags;
+                    metric.measurement = "profile_data.test" + i;
+                    result.add(metric);
+                }
+            }
+        }
+        return result;
+    }
+
     /**
-     * 将一组数据平均分成n组
+     * 将数据源根据线程数分组
      *
      * @param source 要分组的数据源
      * @param n      平均分成n组
@@ -76,30 +90,6 @@ public class InfluxDbGenerator {
                 value = source.subList(i * number + offset, (i + 1) * number + offset);
             }
             result.add(value);
-        }
-        return result;
-    }
-
-    private static List<Metric> initData(InfluxDbGenerator cli) {
-        List<Metric> result = new ArrayList<>();
-        for (int app = 1; app <= APPLICATION_NUMBER; app++) {
-            for (int service = 1; service <= SERVICE_NUMBER; service++) {
-                for (int clazz = 1; clazz <= HOST_NUMBER; clazz++) {
-                    for (int instance = 1; instance <= PROCESS_NUMBER; instance++) {
-                        Map<String, String> tags = new HashMap<>();
-                        tags.put("application", "application_" + app);
-                        tags.put("host", "host_" + service);
-                        tags.put("process", "process_" + clazz);
-                        tags.put("service", "service_" + instance);
-                        for (int i = 0; i < cli.cpuNum; i++) {
-                            Metric metric = new Metric();
-                            metric.tags = tags;
-                            metric.measurement = "cpu_" + i;
-                            result.add(metric);
-                        }
-                    }
-                }
-            }
         }
         return result;
     }
