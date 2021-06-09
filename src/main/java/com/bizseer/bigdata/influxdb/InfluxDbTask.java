@@ -73,7 +73,7 @@ public class InfluxDbTask implements Runnable {
                     fields.put("value", random.nextFloat() * 100);
                 } else {
                     for (int i = 1; i <= 1; i++) {
-                        fields.put("value_" + i, random.nextFloat() * 100);
+                        fields.put("value", random.nextFloat() * 100);
                     }
                 }
                 point = Point.measurement(metric.measurement)
