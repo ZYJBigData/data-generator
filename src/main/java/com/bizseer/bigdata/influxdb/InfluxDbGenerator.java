@@ -3,6 +3,7 @@ package com.bizseer.bigdata.influxdb;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.bizseer.bigdata.InfluxDbTask;
+import com.bizseer.bigdata.metadataInfluxdb.InfluxdbGenerator;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -25,6 +26,7 @@ public class InfluxDbGenerator {
     int interval = 60;
 
     public static void main(String[] args) {
+        InfluxdbGenerator influxdbGenerator = new InfluxdbGenerator();
         InfluxDbGenerator cli = new InfluxDbGenerator();
         JCommander.newBuilder().addObject(cli).build().parse(args);
 
@@ -32,7 +34,8 @@ public class InfluxDbGenerator {
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100000));
         //数据初始化
         print("Data init，生成需要的所有数据。");
-        List<Metric> metrics = initData();
+//        List<Metric> metrics = initData();
+        List<Metric> metrics = influxdbGenerator.initData();
         print("metrics.size:" + metrics.size());
         //根据线程数将数据分片，即就是将数据平均的分给五个线程
         List<List<Metric>> segments = averageAssign(metrics, cli.threadNumber);
