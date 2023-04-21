@@ -7,13 +7,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import kafka.network.RequestChannel;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,8 +17,9 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class InfluxdbGenerator {
-    private static final String url_metadata = "http://192.168.1.115:9998";
+    private static final String url_metadata = "http://192.168.1.113:9998";
     private static final String DATA = "data";
+    private static final String CODE = "code";
 
     public static void main(String[] args) {
         InfluxdbGenerator influxDbGenerator = new InfluxdbGenerator();
@@ -39,28 +36,39 @@ public class InfluxdbGenerator {
     public List<Metric> initData() {
         List<EntityResponseVo> entityResponseVos;
         Map<String, String> mapMetricsModelsCode;
-        String metricsStr = HttpUtils.post(url_metadata + "/api/metadata/v1/meta/metrics/list", "{}");
+        String metricsStr = HttpUtils.post(url_metadata + "/api/metadata/v1/meta/metrics/list","{}");
         try {
             JsonNode jsonNode = JsonUtils.objectMapper.readValue(metricsStr, JsonNode.class);
-            List<MetricInfoResponseVo> metricsList = JsonUtils.objectMapper.readValue(jsonNode.get(DATA).toString(),
-                    new TypeReference<List<MetricInfoResponseVo>>() {
-                    });
+            List<MetricInfoResponseVo> metricsList;
+            if (jsonNode.get(CODE).asInt() == 0) {
+                metricsList = JsonUtils.objectMapper.readValue(jsonNode.get(DATA).toString(),
+                        new TypeReference<List<MetricInfoResponseVo>>() {
+                        });
+            } else {
+                log.error("调用metadata出错，错误信息是" + jsonNode.get("msg").asText());
+                return null;
+            }
             //map集合中 metrics name----->model code
             mapMetricsModelsCode = metricsList.stream().collect(Collectors
-                    .toMap(MetricInfoResponseVo::getMetrics, MetricInfoResponseVo::getModelCode));
+                    .toMap(MetricInfoResponseVo::getMetrics, MetricInfoResponseVo::getModelCode, (metricInfoResponseVo1, metricInfoResponseVo2) -> metricInfoResponseVo1));
             String entityStr = HttpUtils.post(url_metadata + "/api/metadata/v1/entity/list_by_model_codes", JsonUtils.
                     objectMapper.writeValueAsString(mapMetricsModelsCode.values()));
             JsonNode entityJsonNode = JsonUtils.objectMapper.readValue(entityStr, JsonNode.class);
-            entityResponseVos = JsonUtils.objectMapper.readValue(entityJsonNode.get(DATA).toString(), new TypeReference<List<EntityResponseVo>>() {
-            });
+            if (entityJsonNode.get(CODE).asInt() == 0) {
+                entityResponseVos = JsonUtils.objectMapper.readValue(entityJsonNode.get(DATA).toString(), new TypeReference<List<EntityResponseVo>>() {
+                });
+            } else {
+                log.error("调用metadata出错，错误信息是" + entityJsonNode.get("msg").asText());
+                return null;
+            }
         } catch (JsonProcessingException e) {
-            log.info("json序列化失败");
+            log.error("json序列化失败");
             return null;
         }
         //map集合中 entity的code----->model的code
         List<Metric> metricObj = new ArrayList<>();
         Map<String, String> entityMap = entityResponseVos.stream().collect(Collectors.toMap(EntityResponseVo::getCode,
-                EntityResponseVo::getModelCode));
+                EntityResponseVo::getModelCode,(entityResponseVo1,entityResponseVo2)->entityResponseVo1));
         for (Map.Entry<String, String> mapEntryModel : mapMetricsModelsCode.entrySet()) {
             for (Map.Entry<String, String> mapEntryEntity : entityMap.entrySet()) {
                 if (mapEntryModel.getValue().equalsIgnoreCase(mapEntryEntity.getValue())) {

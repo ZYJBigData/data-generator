@@ -24,7 +24,7 @@ public class KafkaGenerator {
     String bootStrapServers = "10.0.90.74:9000,10.0.90.75:9000,10.0.90.76:9000";
 
     @Parameter(names = "--topic")
-    String topic = "release-2.x-influxdbsink";
+    String topic = "zyj-in";
 
     @Parameter(names = "--interval", description = "采样间隔")
     int interval = 10;

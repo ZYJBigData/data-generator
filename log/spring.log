@@ -1,0 +1,12 @@
+2023-04-13T16:43:07,208|#|INFO|#|90445|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:43:07,424|#|WARN|#|90445|#|main|#|ru.yandex.clickhouse.ClickHouseStatementImpl.checkForErrorAndThrow:1087|#|error while read compressed stream Magic is not correct: 112
+2023-04-13T16:43:48,380|#|INFO|#|90455|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:45:00,053|#|INFO|#|90472|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:45:57,087|#|INFO|#|90478|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:49:18,483|#|INFO|#|90525|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:51:07,368|#|INFO|#|90540|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:51:53,584|#|INFO|#|90571|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T16:51:53,861|#|INFO|#|90571|#|main|#|com.bizseer.bigdata.clickhouse.CKTest.main:27|#|返回的结果：==1
+2023-04-13T16:52:44,282|#|INFO|#|90584|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T17:01:31,374|#|INFO|#|90648|#|main|#|ru.yandex.clickhouse.ClickHouseDriver.<clinit>:49|#|Driver registered
+2023-04-13T17:01:31,635|#|INFO|#|90648|#|main|#|com.bizseer.bigdata.clickhouse.CKTest.main:27|#|返回的结果：==1

@@ -74,4 +74,9 @@ public class EntityResponseVo implements Serializable {
      * 指标数量
      */
     private Integer metricCount;
+
+    /**
+     * 对象图标
+     */
+    private String icon;
 }
