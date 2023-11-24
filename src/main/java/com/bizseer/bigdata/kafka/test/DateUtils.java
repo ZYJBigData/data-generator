@@ -1,9 +1,14 @@
 package com.bizseer.bigdata.kafka.test;
 
 import lombok.Getter;
+import org.apache.commons.codec.digest.DigestUtils;
 import scala.Tuple2;
+import sun.security.provider.MD5;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.bizseer.bigdata.kafka.test.ProData.dim001;
 
 public class DateUtils {
     public enum TimeMillis {
@@ -91,11 +96,15 @@ public class DateUtils {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            if (i == 5) {
-                continue;
-            }
-            System.out.println("i====" + i);
-        }
+        String cpu07061 = DigestUtils.md5Hex(String.format("%s_%d", "zyj_test_002", 448));
+        System.out.println(cpu07061);
+
+//        String zyj_test_002 = DigestUtils.md5Hex(String.format("%s_%d", "test_1002", 90));
+//        System.out.println(zyj_test_002);
+
+//        for (String dim : dim001) {
+//            String zyj_test_002 = DigestUtils.md5Hex(String.format("%s_%d_%s", "zyj_test_002", 106, dim));
+//            System.out.println(dim + "_" + zyj_test_002);
+//        }
     }
 }

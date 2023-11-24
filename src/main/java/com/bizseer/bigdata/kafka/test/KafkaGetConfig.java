@@ -8,15 +8,11 @@ import java.util.Properties;
 @NoArgsConstructor
 @Getter
 public class KafkaGetConfig {
-
-
     public String topic = "lyy_test_1p";
     public String groupId = "data_platform_metric_group";
-//    public String bootstrapServers = "node001:9092,node003:9092";
-    public String bootstrapServers = "10.0.90.74:9000,10.0.90.75:9000,10.0.90.76:9000";
-//    public String bootstrapServers = "10.0.33.33:9000,10.0.33.34:9000,10.0.33.35:9000";
-//    public String bootstrapServers = "10.0.110.114:9092";
-//    public String bootstrapServers = "bs-data-arch-juggle-pts-001:9092";
+    public String bootstrapServers = "10.0.60.141:9092,0.0.60.142:9092,10.0.60.143:9092";
+//    public String bootstrapServers = "10.0.60.144:9092,10.0.60.145:9092,10.0.60.146:9092";
+//public String bootstrapServers = "192.168.10.199:9092";
 
     public KafkaGetConfig(String topic) {
         this.topic = topic;
@@ -40,11 +36,6 @@ public class KafkaGetConfig {
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
-//        properties.put("security.protocol", "SASL_PLAINTEXT");
-//        properties.put("sasl.mechanism", "GSSAPI");
-//        properties.put("sasl.kerberos.service.name", "kafka");
-
         return properties;
     }
 

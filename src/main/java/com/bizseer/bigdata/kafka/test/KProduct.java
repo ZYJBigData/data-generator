@@ -21,12 +21,6 @@ public abstract class KProduct<T> {
         this.topicName = topicName;
     }
 
-    public KProduct(String topicName) {
-        this.producer = new KafkaProducer<>(new KafkaGetConfig(topicName).getKafkaConfig());
-        this.topicName = topicName;
-    }
-
-
     public long send() {
         AtomicLong flag = new AtomicLong(0);
         try {
