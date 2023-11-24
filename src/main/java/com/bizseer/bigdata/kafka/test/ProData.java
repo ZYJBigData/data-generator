@@ -240,13 +240,5 @@ public class ProData {
 
         return inputMessage;
     }
-
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        String join = String.join(",", list);
-        System.out.println(join);
-    }
+    
 }

@@ -10,9 +10,9 @@ import java.util.Properties;
 public class KafkaGetConfig {
     public String topic = "lyy_test_1p";
     public String groupId = "data_platform_metric_group";
-    public String bootstrapServers = "10.0.60.141:9092,0.0.60.142:9092,10.0.60.143:9092";
+    //    public String bootstrapServers = "10.0.60.141:9092,0.0.60.142:9092,10.0.60.143:9092";
 //    public String bootstrapServers = "10.0.60.144:9092,10.0.60.145:9092,10.0.60.146:9092";
-//public String bootstrapServers = "192.168.10.199:9092";
+    public String bootstrapServers = "10.0.100.16:9092";
 
     public KafkaGetConfig(String topic) {
         this.topic = topic;

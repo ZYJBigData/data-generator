@@ -1,11 +1,30 @@
 package com.bizseer.bigdata.kafka.test;
 
+import com.bizseer.bigdata.kafka.bean.InputMessageData;
+
 import java.util.*;
 
-public class kafkaTest {
+class KafkaTest {
     public static void main(String[] args) throws InterruptedException {
 //        stream();
-       batch();
+//       batch();
+        
+        stream_001();
+    }
+    
+    public static void stream_001() throws InterruptedException {
+        while (true){
+            List<InputMessageData> metric = KafkaDataPlat1.getMetric();
+            new KProduct<InputMessageData>(0L, "data_platform_metric") {
+                @Override
+                public List<InputMessageData> setMsg() {
+                    return metric;
+                }
+            }.send();
+            System.out.println("done");
+//            //粒度
+            Thread.sleep( 1000L);
+        }
     }
 
     public static void stream() throws InterruptedException {
