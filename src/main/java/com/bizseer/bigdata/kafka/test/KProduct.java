@@ -15,8 +15,8 @@ public abstract class KProduct<T> {
     private final String topicName;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public KProduct(long interval, String topicName) {
-        this.producer = new KafkaProducer<>(new KafkaGetConfig(topicName).getKafkaConfig());
+    public KProduct(long interval, String topicName,String bootstrapServers) {
+        this.producer = new KafkaProducer<>(new KafkaGetConfig(topicName,bootstrapServers).getKafkaConfig());
         this.interval = interval;
         this.topicName = topicName;
     }

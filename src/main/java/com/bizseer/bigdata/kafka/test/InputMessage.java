@@ -31,6 +31,7 @@ public class InputMessage {
         private String metricNameEN;
         @JsonProperty
         private String unit;
+        @JsonProperty("custom_fields")
         private List<CustomFieldInfo> customFields;
         private String categoryTitle;
         @JsonProperty("important_level")

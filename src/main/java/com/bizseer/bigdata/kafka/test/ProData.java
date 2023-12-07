@@ -8,6 +8,7 @@ import java.util.*;
 public class ProData {
     static List<String> dim001 = Arrays.asList("10.8.80.161", "10.8.80.162", "10.8.80.163", "10.8.80.164", "10.8.80.165", "10.8.80.166");
     static List<String> dim002 = Arrays.asList("online_trade_system", "order_system");
+    static List<String> dim003 = Arrays.asList("PodName","app");
     static Random random = new Random();
 
     public static List<InputMessage> getMetrics() {
@@ -191,12 +192,14 @@ public class ProData {
     public static InputMessage getAutoMetric() {
 
         InputMessage.Metrics metrics = new InputMessage.Metrics();
-        InputMessage.CustomFieldInfo customFieldInfo1 = new InputMessage.CustomFieldInfo("filedCode1", "fieldName1", "String", "filed_1");
+        InputMessage.CustomFieldInfo customFieldInfo1 = new InputMessage.CustomFieldInfo("filedCode1", "fieldName1", "Array", "1,2,3");
         InputMessage.CustomFieldInfo customFieldInfo2 = new InputMessage.CustomFieldInfo("filedCode2", "fieldName2", "String", "filed_2");
-        metrics.setMetricNameEN("zyj_auto_1114_055");
-        metrics.setCustomFields(Arrays.asList(customFieldInfo1, customFieldInfo2));
-        metrics.setMetricCode("zyj_auto_1114_044");
-        metrics.setMetricName("指标名称_2");
+        InputMessage.CustomFieldInfo customFieldInfo3 = new InputMessage.CustomFieldInfo("filedCode3", "fieldName3", "number", "100");
+
+        metrics.setMetricNameEN("auto_1129_01");
+        metrics.setCustomFields(Arrays.asList(customFieldInfo1, customFieldInfo2,customFieldInfo3));
+        metrics.setMetricCode("auto_1129_01");
+        metrics.setMetricName("指标中名称_1");
         metrics.setValue("11");
         metrics.setGranularity("60");
         metrics.setLabels(Collections.singletonList("c"));
@@ -210,6 +213,7 @@ public class ProData {
 
         header.put("is_auto_model", "true");
         header.put("value_type", "float");
+        header.put("biz_category_title","PodName");
 
 
         InputMessage inputMessage = new InputMessage();
@@ -224,11 +228,14 @@ public class ProData {
 
         InputMessage.DimensionInfo dimensionInfo2 = new InputMessage.DimensionInfo();
         dimensionInfo2.setDimensionCode("tag4");
-        dimensionInfo2.setDimensionValue("4");
+        dimensionInfo2.setDimensionValue(dim001.get(random.nextInt(6)));
 
         InputMessage.DimensionInfo dimensionInfo3 = new InputMessage.DimensionInfo();
-        dimensionInfo3.setDimensionCode("tag6");
-        dimensionInfo3.setDimensionValue("6");
+
+        dimensionInfo3.setDimensionCode("model");
+        dimensionInfo3.setDimensionValue("PodName");
+        dimensionInfo3.setIsPrimary("true");
+        dimensionInfo3.setAllowNull("false");
 
         InputMessage.DimensionInfo dimensionInfo4 = new InputMessage.DimensionInfo();
         dimensionInfo4.setDimensionCode("tag2");
@@ -236,7 +243,15 @@ public class ProData {
         dimensionInfo4.setIsPrimary("true");
         dimensionInfo4.setAllowNull("false");
 
-        metrics.setDimensions(Arrays.asList(dimensionInfo4, dimensionInfo1, dimensionInfo2, dimensionInfo3));
+        InputMessage.DimensionInfo dimensionInfo5 = new InputMessage.DimensionInfo();
+
+        dimensionInfo5.setDimensionCode("instance");
+        dimensionInfo5.setDimensionValue("ts.paymentservice-1");
+        dimensionInfo5.setIsPrimary("true");
+        dimensionInfo5.setAllowNull("false");
+
+
+        metrics.setDimensions(Arrays.asList(dimensionInfo1, dimensionInfo2,dimensionInfo3,dimensionInfo4,dimensionInfo5));
 
         return inputMessage;
     }

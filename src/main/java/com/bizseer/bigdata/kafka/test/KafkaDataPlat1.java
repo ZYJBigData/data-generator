@@ -9,7 +9,7 @@ public class KafkaDataPlat1 {
     static List<String> dim002 = Arrays.asList("gateway", "upm");
     static Random random = new Random();
 
-    public static List<InputMessageData> getMetric() {
+    public static List<InputMessageData> getMetric(Integer count) {
         Map<String, String> header = new HashMap<>();
         header.put("model_name", "model_1124_001");
         header.put("is_auto_model", "true");
@@ -21,7 +21,7 @@ public class KafkaDataPlat1 {
 
         InputMessageData.Measurement measurement = new InputMessageData.Measurement();
         measurement.setName("CPU");
-        measurement.setTimestamp(30000 + System.currentTimeMillis());
+        measurement.setTimestamp(60000 + System.currentTimeMillis());
         Map<String, Double> metrics = new HashMap<>();
         //TODO 变化
         metrics.put("idle", 45d + random.nextDouble());
@@ -50,7 +50,7 @@ public class KafkaDataPlat1 {
         Map<String, String> dimensions = new HashMap<>();
         //TODO 变化
         dimensions.put("ip", dim001.get(random.nextInt(4)));
-        dimensions.put("host", dim002.get(random.nextInt(2)));
+        dimensions.put("host", "host_0"+33);
         measurement.setDimensions(dimensions);
 
         InputMessageData inputMessageData = new InputMessageData();

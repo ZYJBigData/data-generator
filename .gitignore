@@ -5,4 +5,6 @@
 *.iml
 target/
 venv/
-log/
+log
+log/spring.log
+log/*
