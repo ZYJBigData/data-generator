@@ -8,10 +8,10 @@ import java.util.*;
 import static com.bizseer.bigdata.common.JsonUtils.objectMapper;
 
 class KafkaTest {
-//    public static String bootstrapServers = "10.0.60.141:9092,0.0.60.142:9092,10.0.60.143:9092";
+    public static String bootstrapServers = "10.0.60.141:9092,0.0.60.142:9092,10.0.60.143:9092";
 
     //    public String bootstrapServers = "10.0.60.144:9092,10.0.60.145:9092,10.0.60.146:9092";
-    public static String bootstrapServers = "10.0.100.16:9092";
+//    public static String bootstrapServers = "10.0.100.16:9092";
     public static void main(String[] args) throws InterruptedException {
 //        stream();
 //       batch();

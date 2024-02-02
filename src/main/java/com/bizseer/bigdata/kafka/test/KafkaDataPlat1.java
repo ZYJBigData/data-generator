@@ -50,7 +50,7 @@ public class KafkaDataPlat1 {
         Map<String, String> dimensions = new HashMap<>();
         //TODO 变化
         dimensions.put("ip", dim001.get(random.nextInt(4)));
-        dimensions.put("host", "host_0"+33);
+        dimensions.put("host", "host_0"+count);
         measurement.setDimensions(dimensions);
 
         InputMessageData inputMessageData = new InputMessageData();
